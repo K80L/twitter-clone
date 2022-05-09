@@ -27,7 +27,7 @@ func SetGinLogToFile() {
 	if err != nil {
 		log.Panic().Err(err).Msg("Error opening Gin log file")
 	}
-	gin.DefaultWriter = io.MultiWriter(logfile)
+	gin.DefaultWriter = io.MultiWriter(logFile)
 }
 
 func ConfigureLogger(env string) {
@@ -59,7 +59,7 @@ func createLogDir() {
 func backupLastLog() {
 	timestamp := time.Now().Format("20060201_15_04_05")
 	base := strings.TrimSuffix(logName, filepath.Ext(logName))
-	bkpLogName := base + "_" + timeStamp + "." + filepath.Ext(logName)
+	bkpLogName := base + "_" + timestamp + "." + filepath.Ext(logName)
 	bkpLogPath := filepath.Join(logsDir, bkpLogName)
 
 	logFile, err := ioutil.ReadFile(logFilePath)

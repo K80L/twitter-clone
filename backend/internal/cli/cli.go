@@ -27,6 +27,6 @@ func Parse() {
 	flag.Parse()
 	logging.ConfigureLogger(*env)
 	if *env == "prod" {
-		logging.SetGinLoggingToFile()
+		logging.SetGinLogToFile()
 	}
 }
