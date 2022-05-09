@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Starting our app")
+	fmt.Println("Starting our app!!")
 
 	// start the server from backend/server package
 	server.Start(conf.NewConfig())
