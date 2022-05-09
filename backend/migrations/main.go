@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/93lykevin/go-twit-backend/conf"
-	"github.com/93lykevin/go-twit-backend/database"
-	"github.com/93lykevin/go-twit-backend/store"
+	"github.com/93lykevin/go-twit-backend/internal/conf"
+	"github.com/93lykevin/go-twit-backend/internal/database"
+	"github.com/93lykevin/go-twit-backend/internal/store"
 	"github.com/go-pg/migrations/v8"
 )
 
