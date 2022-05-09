@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	"github.com/93lykevin/go-twit-backend/internal/logging"
 )
 
 func usage() {
@@ -23,5 +25,8 @@ func Parse() {
 	flag.Usage = usage
 	env := flag.String("env", "dev", `Sets run environment. Possible values are "dev" and "prod"`)
 	flag.Parse()
-	fmt.Println(*env)
+	logging.ConfigureLogger(*env)
+	if *env == "prod" {
+		logging.SetGinLoggingToFile()
+	}
 }

@@ -78,6 +78,5 @@ func NewConfig() Config {
 }
 
 func logAndPanic(envVar string) {
-	log.Println("ENV variable not set or value not valid")
-	panic(envVar)
+	log.Panic().Str("envVar", envVar).Msg("ENV variable not set or value not valid")
 }
