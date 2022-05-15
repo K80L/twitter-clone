@@ -1,9 +1,11 @@
 package store
 
 import (
+	"context"
 	"crypto/rand"
 	"time"
 
+	"github.com/go-pg/pg/v10"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -16,6 +18,16 @@ type User struct {
 	Salt           []byte `json:"-"`
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
+	Tweets         []*Tweet `json:"-" pg:"fk:user_id,rel:has-many,on_delete:CASCADE"`
+}
+
+var _ pg.AfterSelectHook = (*User)(nil)
+
+func (user *User) AfterSelect(ctx context.Context) error {
+	if user.Tweets == nil {
+		user.Tweets = []*Tweet{}
+	}
+	return nil
 }
 
 // AddUser creates a user and adds it to the database
@@ -63,4 +75,15 @@ func GenerateSalt() ([]byte, error) {
 		return nil, err
 	}
 	return salt, nil
+}
+
+func FetchUser(id int) (*User, error) {
+	user := new(User)
+	user.ID = id
+	err := db.Model(user).Returning("*").WherePK().Select()
+	if err != nil {
+		log.Error().Err(err).Msg("Error fetching user")
+		return nil, err
+	}
+	return user, nil
 }

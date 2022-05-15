@@ -1,5 +1,6 @@
 #! /bin/bash
 
+# script to automatically source and run the backend
 # default ENV is dev
 env=dev
 
@@ -22,4 +23,3 @@ cd ../../backend
 source .env
 go build -o cmd/twitter-clone/twitter-clone cmd/twitter-clone/main.go
 cmd/twitter-clone/twitter-clone -env $env &
-

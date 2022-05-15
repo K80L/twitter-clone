@@ -7,6 +7,9 @@ import (
 )
 
 func Start(cfg conf.Config) {
+	// call jwtSetup to create signer and verifier that will later be used in authentication
+	jwtSetup(cfg)
+
 	// set the store database connection
 	store.SetDBConnection(database.NewDBOptions(conf.NewConfig()))
 
