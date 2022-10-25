@@ -33,6 +33,7 @@ func createTweet(ctx *gin.Context) {
 	})
 }
 
+// fetch user tweets
 func indexTweets(ctx *gin.Context) {
 	user, err := currentUser(ctx)
 	if err != nil {

@@ -4,7 +4,9 @@
 # default ENV is dev
 env=dev
 
+# read aguments passed to the script
 while test $# -gt 0; do
+  # if we found -env argument, we will set the env variable to the -env argument that was passed in
   case "$1" in
     -env)
       shift

@@ -15,6 +15,7 @@ type Tweet struct {
 	UserID    int `json:"-"`
 }
 
+// reminder, only packages in the store can communicate with the database
 // AddTweet is the actual function that communicates with the database to create a new Tweet
 func AddTweet(user *User, tweet *Tweet) error {
 	tweet.UserID = user.ID

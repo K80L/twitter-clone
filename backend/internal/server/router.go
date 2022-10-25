@@ -3,13 +3,14 @@ package server
 import (
 	"net/http"
 
+	"github.com/93lykevin/go-twit-backend/internal/store"
 	"github.com/gin-gonic/gin"
 )
 
 // same recipe for all CRUD methods
-// 1. implement function to communicate w/ database for required action
-// 2. implenent Gin handler which will use function from step 1
-// 3. add route with handler to router
+// 1. implement function to communicate w/ database for required action (this is in the store package)
+// 2. implenent Gin handler which will use function from step 1 (this is in the server package eg. /server/tweets.go)
+// 3. add route with handler to router (this is here)
 
 func setRouter() *gin.Engine {
 	// creates default gin router with Logger and Recovery middleware already attached
@@ -20,10 +21,14 @@ func setRouter() *gin.Engine {
 	router.RedirectTrailingSlash = true
 
 	// create API route group
+	// use customErrors defined in middleware.go
+	// we are trying to bind request data before even hitting the signUp and signIn handlers
+	// with binding like this, handlers don't need to think about binding errors because there was none if the handler is reached!!
 	api := router.Group("/api")
+	api.Use(customErrors)
 	{
-		api.POST("/signup", signUp)
-		api.POST("/signin", signIn)
+		api.POST("/signup", gin.Bind(store.User{}), signUp)
+		api.POST("/signin", gin.Bind(store.User{}), signIn)
 	}
 
 	authorized := api.Group("/")

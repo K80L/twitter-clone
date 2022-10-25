@@ -6,6 +6,8 @@ import (
 	"github.com/93lykevin/go-twit-backend/internal/store"
 )
 
+const InternalServerError = "Something went wrong!"
+
 func Start(cfg conf.Config) {
 	// call jwtSetup to create signer and verifier that will later be used in authentication
 	jwtSetup(cfg)

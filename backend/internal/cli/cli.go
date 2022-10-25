@@ -8,6 +8,7 @@ import (
 	"github.com/93lykevin/go-twit-backend/internal/logging"
 )
 
+// set usage text to be printed if app is started with some invalid options or args
 func usage() {
 	fmt.Print(`This program runs twitter-clone backend server.
 
@@ -24,6 +25,7 @@ func usage() {
 func Parse() {
 	flag.Usage = usage
 	env := flag.String("env", "dev", `Sets run environment. Possible values are "dev" and "prod"`)
+	// parse all CLI flags with flag.Parse()
 	flag.Parse()
 	logging.ConfigureLogger(*env)
 	if *env == "prod" {

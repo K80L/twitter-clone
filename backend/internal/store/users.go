@@ -21,6 +21,8 @@ type User struct {
 	Tweets         []*Tweet `json:"-" pg:"fk:user_id,rel:has-many,on_delete:CASCADE"`
 }
 
+// AfterSelectHook will be executed after every Select() query. if there is no tweets,
+// the db will return nil but that will be bad for the FE. this hook will instead return an empty slice
 var _ pg.AfterSelectHook = (*User)(nil)
 
 func (user *User) AfterSelect(ctx context.Context) error {

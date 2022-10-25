@@ -11,7 +11,7 @@ import (
 func main() {
 	fmt.Println("Starting our app!!")
 
-	// start the server from backend/server package
+	// start the server from backend/server package using the cli script
 	cli.Parse()
 	server.Start(conf.NewConfig())
 }
