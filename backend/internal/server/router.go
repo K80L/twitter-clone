@@ -3,7 +3,10 @@ package server
 import (
 	"net/http"
 
+	"github.com/93lykevin/go-twit-backend/internal/conf"
 	"github.com/93lykevin/go-twit-backend/internal/store"
+
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,10 +15,13 @@ import (
 // 2. implenent Gin handler which will use function from step 1 (this is in the server package eg. /server/tweets.go)
 // 3. add route with handler to router (this is here)
 
-func setRouter() *gin.Engine {
+func setRouter(cfg conf.Config) *gin.Engine {
 	// creates default gin router with Logger and Recovery middleware already attached
 	router := gin.Default()
 
+	if cfg.Env == "prod" {
+		router.Use(static.Serve("/", static.LocalFile("./assets/build", true)))
+	}
 	// Enables automatic redirection if the current route can't be matched but a
 	// handler for the path with (without) the trailing slash exists
 	router.RedirectTrailingSlash = true

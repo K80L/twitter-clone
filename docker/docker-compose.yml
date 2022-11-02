@@ -1,0 +1,26 @@
+version: "3"
+services:
+  rgb:
+    image: kramat/rgb
+    env_file:
+      - ../.env
+    environment:
+      TWIT_DB_HOST: db
+    depends_on:
+      - db
+    ports:
+      - ${TWIT_PORT}:${TWIT_PORT}
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${TWIT_DB_USER}
+      POSTGRES_PASSWORD: ${TWIT_DB_PASSWORD}
+      POSTGRES_DB: ${TWIT_DB_NAME}
+    ports:
+      - ${TWIT_DB_PORT}:${TWIT_DB_PORT}
+    volumes:
+      - postgresql:/var/lib/postgresql/twitter-clone
+      - postgresql_data:/var/lib/postgresql/twitter-clone/data
+volumes:
+  postgresql: {}
+  postgresql_data: {}

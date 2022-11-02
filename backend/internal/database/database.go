@@ -5,6 +5,8 @@ import (
 	"github.com/go-pg/pg/v10"
 )
 
+// to connect to database with psql:
+// $ psql twitter-clon
 func NewDBOptions(cfg conf.Config) *pg.Options {
 	return &pg.Options{
 		Addr:     cfg.DbHost + ":" + cfg.DbPort,

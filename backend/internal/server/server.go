@@ -17,6 +17,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// graceful shutdown
+// see https://github.com/gin-gonic/gin#graceful-shutdown-or-restart
+
 const InternalServerError = "Something went wrong!"
 
 func Start(cfg conf.Config) {
@@ -24,10 +27,10 @@ func Start(cfg conf.Config) {
 	jwtSetup(cfg)
 
 	// set the store database connection
-	store.SetDBConnection(database.NewDBOptions(conf.NewConfig()))
+	store.SetDBConnection(database.NewDBOptions(conf.NewConfig("dev")))
 
 	// set the router
-	router := setRouter()
+	router := setRouter(conf.NewConfig("dev"))
 
 	server := &http.Server{
 		Addr: cfg.Host + ":" + cfg.Port,
