@@ -1,7 +1,7 @@
 version: "3"
 services:
-  rgb:
-    image: kramat/rgb
+  twit:
+    image: kramat/twit
     env_file:
       - ../.env
     environment:
