@@ -6,6 +6,7 @@ import (
 	"github.com/93lykevin/go-twit-backend/internal/conf"
 	"github.com/93lykevin/go-twit-backend/internal/store"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
@@ -18,6 +19,15 @@ import (
 func setRouter(cfg conf.Config) *gin.Engine {
 	// creates default gin router with Logger and Recovery middleware already attached
 	router := gin.Default()
+
+	// TODO: Using default for now but shall add more fine-tuned configs
+	// https://github.com/gin-contrib/cors
+	// router.Use(cors.Default())
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE"},
+		AllowHeaders: []string{"Content-Type,access-control-allow-origin,access-control-allow-headers,Authorization"},
+	}))
 
 	if cfg.Env == "prod" {
 		router.Use(static.Serve("/", static.LocalFile("./assets/build", true)))
@@ -37,9 +47,11 @@ func setRouter(cfg conf.Config) *gin.Engine {
 		api.POST("/signin", gin.Bind(store.User{}), signIn)
 	}
 
-	authorized := api.Group("/")
+	// TODO: Make sure it's hitting authorized
+	authorized := router.Group("/")
 	authorized.Use(authorization)
 	{
+		authorized.GET("/", authorization)
 		authorized.GET("/tweets", indexTweets)
 		authorized.POST("/tweets", createTweet)
 		authorized.PUT("/tweets", updateTweet)

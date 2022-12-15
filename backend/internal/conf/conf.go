@@ -94,7 +94,7 @@ func logAndPanic(envVar string) {
 }
 
 func NewTestConfig() Config {
-	testConfig := NewConfig()
+	testConfig := NewConfig("test")
 	testConfig.DbName = testConfig.DbName + "_test"
 	return testConfig
 }

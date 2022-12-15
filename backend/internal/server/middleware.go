@@ -41,6 +41,7 @@ func authorization(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
+
 	ctx.Set("user", user)
 	ctx.Next()
 }
@@ -69,7 +70,7 @@ func currentUser(ctx *gin.Context) (*store.User, error) {
 
 func customErrors(ctx *gin.Context) {
 	ctx.Next()
-	if len(ctx.Errors > 0) {
+	if len(ctx.Errors) > 0 {
 		for _, err := range ctx.Errors {
 			switch err.Type {
 			case gin.ErrorTypePublic:

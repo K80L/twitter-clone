@@ -19,7 +19,6 @@ WORKDIR /Users/kevintly1/projects/twitter-clone/backend
 # copy all files to the container
 COPY . .
  
-RUN echo "$PWD"
 # build app executable
 RUN CGO_ENABLED=0 GOOS=linux go build -o /Users/kevintly1/projects/twitter-clone/backend/cmd/twitter-clone/twitter-clone Users/kevintly1/projects/twitter-clone/backend/cmd/twitter-clone/main.go
  

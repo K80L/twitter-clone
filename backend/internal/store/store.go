@@ -60,18 +60,19 @@ func extractColumnName(text string) string {
 	return "Unknown"
 }
 
-func ResetTestDatabase() {
-	// connect to test database
-	SetDBConnection(database.NewDBOptions(conf.NewTestConfig()))
+// TODO: FIXME
+// func ResetTestDatabase() {
+// 	// connect to test database
+// 	SetDBConnection(database.NewDBOptions(conf.NewTestConfig()))
 
-	// empty all tables and restart sequence counters
-	tables := []string{"users", "tweets"}
-	for _, table : = range tables {
-		_, err := db.Exec(fmt.Sprintf("DELETE FROM %s;", table))
-		if err != nil {
-			log.Panic().Err(err).Str("Table" table).Msg("Error clearing test database")
-		}
+// 	// empty all tables and restart sequence counters
+// 	tables := []string{"users", "tweets"}
+// 	for _, table := range tables {
+// 		_, err := db.Exec(fmt.Sprintf("DELETE FROM %s;", table))
+// 		if err != nil {
+// 			log.Panic().Err(err).Str("Table", table).Msg("Error clearing test database")
+// 		}
 
-		_, err := db.Exec(fmt.Sprintf("ALTER SEQUENCE %s_id_seq RESTART;", table))
-	}
-}
+// 		_, err := db.Exec(fmt.Sprintf("ALTER SEQUENCE %s_id_seq RESTART;", table))
+// 	}
+// }

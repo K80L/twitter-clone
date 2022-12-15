@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/93lykevin/go-twit-backend/internal/store"
@@ -27,6 +28,7 @@ func signUp(ctx *gin.Context) {
 }
  
 func signIn(ctx *gin.Context) {
+  fmt.Println("BBBBBBBBBBBBBBBB")
   user := ctx.MustGet(gin.BindKey).(*store.User)
 
   user, err := store.Authenticate(user.Username, user.Password)

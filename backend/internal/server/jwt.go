@@ -19,6 +19,9 @@ var (
 	jwtVerifier jwt.Verifier
 )
 
+type TokenBody struct {
+}
+
 // jwtSetup creates a new signer and verifier to be used in authentication
 func jwtSetup(conf conf.Config) {
 	var err error
@@ -54,19 +57,26 @@ func generateJWT(user *store.User) string {
 }
 
 func verifyJWT(tokenStr string) (int, error) {
+	fmt.Println("CCCCCCCCCCCCCCC")
 	token, err := jwt.Parse([]byte(tokenStr), jwtVerifier)
 	if err != nil {
 		log.Error().Err(err).Str("tokenStr", tokenStr).Msg("Error parsing JWT")
 		return 0, err
 	}
 
+	fmt.Printf("Algorithm %v\n", token.Header().Algorithm)
+	fmt.Printf("Type      %v\n", token.Header().Type)
+	fmt.Printf("Claims    %v\n", string(token.Claims()))
+	fmt.Printf("Payload   %v\n", string(token.PayloadPart()))
+	fmt.Printf("Token     %v\n", string(token.Bytes()))
 	if err := jwtVerifier.Verify(token); err != nil {
 		log.Error().Err(err).Msg("Error verifying JWT")
 		return 0, err
 	}
 
 	var claims jwt.RegisteredClaims
-	if err := json.Unmarshal(token.ClaimsPart(), &claims); err != nil {
+	fmt.Println(string(token.ClaimsPart()))
+	if err := json.Unmarshal(token.Claims(), &claims); err != nil {
 		log.Error().Err(err).Msg("Error unmarshalling JWT claims")
 		return 0, err
 	}
@@ -83,3 +93,8 @@ func verifyJWT(tokenStr string) (int, error) {
 
 	return id, err
 }
+
+// func verifyJWTFromFrontend(ctx *gin.Context) {
+// 	paramToken := ctx.Param("token")
+// 	token, err := strconv.Atoi()
+// }
