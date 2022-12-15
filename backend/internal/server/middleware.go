@@ -22,26 +22,31 @@ func authorization(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing."})
 		return
 	}
+	fmt.Println("1111111111111111111")
 	headerParts := strings.Split(authHeader, " ")
 	if len(headerParts) != 2 {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header format is not valid."})
 		return
 	}
+	fmt.Println("22222222222222222222")
 	if headerParts[0] != "Bearer" {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing bearer part."})
 		return
 	}
+	fmt.Println("333333333333333333")
 	userID, err := verifyJWT(headerParts[1])
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
+	fmt.Println("44444444444444")
 	user, err := store.FetchUser(userID)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
+	fmt.Println("5555555555555555555")
 	ctx.Set("user", user)
 	ctx.Next()
 }

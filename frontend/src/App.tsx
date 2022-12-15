@@ -16,15 +16,13 @@ function App() {
     // TODO: Check the return type Promise<boolean | undefined>.
     // Maybe it should just be Promise<boolean> but it is giving me an error that I don't want to look into yet
     async function authorizeToken(token: string): Promise<boolean | undefined> {
-      console.log('AAAAAAAAAAAAA');
-      console.log(token);
       try {
         const response = await fetch('http://localhost:8080/', {
           method: 'GET',
           cache: 'no-cache',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: token,
+            Authorization: 'Bearer ' + token,
           },
         });
         console.log(response);
