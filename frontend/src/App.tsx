@@ -7,15 +7,21 @@ import Preferences from './components/Preferences/Preferences';
 import Login from './components/Login/Login';
 import useToken from './components/Login/useToken';
 
+interface AuthorizedResponse {
+  msg: string;
+  data: boolean;
+}
+
 function App() {
   const { token, setToken } = useToken();
   const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
-  console.log(isTokenValid);
 
   useEffect(() => {
     // TODO: Check the return type Promise<boolean | undefined>.
     // Maybe it should just be Promise<boolean> but it is giving me an error that I don't want to look into yet
-    async function authorizeToken(token: string): Promise<boolean | undefined> {
+    async function authorizeToken(
+      token: string
+    ): Promise<AuthorizedResponse | undefined> {
       try {
         const response = await fetch('http://localhost:8080/', {
           method: 'GET',
@@ -25,13 +31,12 @@ function App() {
             Authorization: 'Bearer ' + token,
           },
         });
-        console.log(response);
         if (!response.ok) {
           throw new Error('Error authorizing token');
         }
 
-        const resp: boolean = await response.json();
-        setIsTokenValid(resp);
+        const resp: AuthorizedResponse = await response.json();
+        setIsTokenValid(resp.data);
         return resp;
       } catch (e) {
         console.error(e);

@@ -22,33 +22,69 @@ func authorization(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing."})
 		return
 	}
-	fmt.Println("1111111111111111111")
+
 	headerParts := strings.Split(authHeader, " ")
 	if len(headerParts) != 2 {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header format is not valid."})
 		return
 	}
-	fmt.Println("22222222222222222222")
+
 	if headerParts[0] != "Bearer" {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing bearer part."})
 		return
 	}
-	fmt.Println("333333333333333333")
+
 	userID, err := verifyJWT(headerParts[1])
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Println("44444444444444")
+
 	user, err := store.FetchUser(userID)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	fmt.Println("5555555555555555555")
 	ctx.Set("user", user)
 	ctx.Next()
+}
+
+func checkIfTokenIsValid(ctx *gin.Context) {
+	authHeader := ctx.GetHeader("Authorization")
+	if authHeader == "" {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing."})
+		return
+	}
+
+	headerParts := strings.Split(authHeader, " ")
+	if len(headerParts) != 2 {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header format is not valid."})
+		return
+	}
+
+	if headerParts[0] != "Bearer" {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing bearer part."})
+		return
+	}
+
+	userID, err := verifyJWT(headerParts[1])
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := store.FetchUser(userID)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.Set("user", user)
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":  "Token is valid",
+		"data": true,
+	})
 }
 
 // first check if user is set for this context. if not, error is returned
@@ -116,7 +152,7 @@ func customValidationError(err validator.FieldError) string {
 	case "required":
 		return fmt.Sprintf("%s is required", err.Field())
 	case "min":
-		return fmt.Sprintf("%s must be longer than or equal to %s characters.", err.Field, err.Param())
+		return fmt.Sprintf("%s must be longer than or equal to %s characters.", err.Field(), err.Param())
 	case "max":
 		return fmt.Sprintf("%s cannot be longer than %s characters.", err.Field(), err.Param())
 	default:
