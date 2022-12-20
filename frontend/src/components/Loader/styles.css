@@ -1,0 +1,38 @@
+.loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  height: 27px;
+  width: 27px;
+  border: 5px solid rgb(29, 155, 240, 0.5);
+  border-top: 5px solid rgb(29, 155, 240);
+  border-radius: 50%;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+  /* animation-name: spin; */
+  /* animation-duration: 1s; */
+  /* animation-delay: 0s; */
+  /* animation-iteration-count: infinite; */
+  /* animation-timing-function: linear; */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

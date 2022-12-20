@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { Header } from './components/Header/Header';
 import Dashboard from './components/Dashboard/Dashboard';
 import Preferences from './components/Preferences/Preferences';
+import Home from './components/Home/Home';
 import Login from './components/Login/Login';
+import Loader from './components/Loader/Loader';
 import useToken from './components/Login/useToken';
 
 interface AuthorizedResponse {
@@ -15,10 +17,9 @@ interface AuthorizedResponse {
 function App() {
   const { token, setToken } = useToken();
   const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // TODO: Check the return type Promise<boolean | undefined>.
-    // Maybe it should just be Promise<boolean> but it is giving me an error that I don't want to look into yet
     async function authorizeToken(
       token: string
     ): Promise<AuthorizedResponse | undefined> {
@@ -40,24 +41,29 @@ function App() {
         return resp;
       } catch (e) {
         console.error(e);
+      } finally {
+        setIsLoading(false);
       }
     }
 
     authorizeToken(token);
   }, [token]);
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
   if (!isTokenValid) {
     return <Login setToken={setToken} />;
   }
-  // if (!isTokenValid(token)) {
-  //   return <Login setToken={setToken} />;
-  // }
 
   return (
     <div className="wrapper">
       <Header />
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Navigate to="/home" />} />
+          <Route path="/home" element={<Home />}></Route>
           <Route path="/tweets" element={<Dashboard />}></Route>
           <Route path="/preferences" element={<Preferences />}></Route>
         </Routes>
