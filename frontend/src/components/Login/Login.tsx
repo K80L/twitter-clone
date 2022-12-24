@@ -1,46 +1,6 @@
 import { useState } from 'react';
+import { login } from '../../api/sessions';
 import './styles.css';
-
-interface LoginResponse {
-  jwt: string;
-  msg: string;
-}
-
-interface Credentials {
-  username: string;
-  password: string;
-}
-
-async function login(credentials: Credentials) {
-  try {
-    const response = await fetch(
-      `http://localhost:8080/api/signin?Username=${credentials.username}&Password=${credentials.password}/`,
-      {
-        method: 'POST',
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: credentials.username,
-          password: credentials.password,
-        }),
-        // headers: {
-        //   'Content-Type': 'application/json',
-        // },
-      }
-    );
-
-    if (response.ok) {
-      const data = await response.json();
-      return data;
-    } else {
-      throw new Error('Unable to login');
-    }
-  } catch (e) {
-    console.error(e);
-  }
-}
 
 export default function Login({ setToken }: any): JSX.Element {
   const [username, setUsername] = useState<string>('');
@@ -57,8 +17,8 @@ export default function Login({ setToken }: any): JSX.Element {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const loginResponse: LoginResponse = await login({ username, password });
-    console.log('loginResponse', loginResponse);
+    const loginResponse = await login({ username, password });
+
     loginResponse?.jwt && setToken(loginResponse.jwt);
   };
 

@@ -57,7 +57,6 @@ func generateJWT(user *store.User) string {
 }
 
 func verifyJWT(tokenStr string) (int, error) {
-	fmt.Println("CCCCCCCCCCCCCCC")
 	token, err := jwt.Parse([]byte(tokenStr), jwtVerifier)
 	if err != nil {
 		log.Error().Err(err).Str("tokenStr", tokenStr).Msg("Error parsing JWT")

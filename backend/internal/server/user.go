@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/93lykevin/go-twit-backend/internal/store"
@@ -28,7 +27,6 @@ func signUp(ctx *gin.Context) {
 }
  
 func signIn(ctx *gin.Context) {
-  fmt.Println("BBBBBBBBBBBBBBBB")
   user := ctx.MustGet(gin.BindKey).(*store.User)
 
   user, err := store.Authenticate(user.Username, user.Password)
@@ -41,4 +39,16 @@ func signIn(ctx *gin.Context) {
     "msg": "Signed in successfully.",
     "jwt": generateJWT(user),
   })
+}
+
+// TODO: Fix and finish me
+func logOut(ctx *gin.Context) {
+  user := ctx.MustGet(gin.BindKey).(*store.User)
+
+  user, err := store.Authenticate(user.Username, user.Password)
+  if err != nil {
+    ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Logout failed"})
+  }
+
+
 }

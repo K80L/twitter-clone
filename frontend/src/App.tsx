@@ -8,11 +8,8 @@ import Home from './components/Home/Home';
 import Login from './components/Login/Login';
 import Loader from './components/Loader/Loader';
 import useToken from './components/Login/useToken';
-
-interface AuthorizedResponse {
-  msg: string;
-  data: boolean;
-}
+import { authorizeToken } from './api/sessions';
+import useAuthContext, { AuthProvider } from './hooks/useAuthContext';
 
 function App() {
   const { token, setToken } = useToken();
@@ -20,33 +17,13 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    async function authorizeToken(
-      token: string
-    ): Promise<AuthorizedResponse | undefined> {
-      try {
-        const response = await fetch('http://localhost:8080/', {
-          method: 'GET',
-          cache: 'no-cache',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'Bearer ' + token,
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Error authorizing token');
-        }
-
-        const resp: AuthorizedResponse = await response.json();
-        setIsTokenValid(resp.data);
-        return resp;
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setIsLoading(false);
-      }
+    try {
+      authorizeToken(token, setIsTokenValid);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
     }
-
-    authorizeToken(token);
   }, [token]);
 
   if (isLoading) {
@@ -58,17 +35,19 @@ function App() {
   }
 
   return (
-    <div className="wrapper">
-      <Header />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="/home" element={<Home />}></Route>
-          <Route path="/tweets" element={<Dashboard />}></Route>
-          <Route path="/preferences" element={<Preferences />}></Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <AuthProvider>
+      <div className="wrapper">
+        <Header />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="/home" element={<Home />}></Route>
+            <Route path="/tweets" element={<Dashboard />}></Route>
+            <Route path="/preferences" element={<Preferences />}></Route>
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </AuthProvider>
   );
 }
 
