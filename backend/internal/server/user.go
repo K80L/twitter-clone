@@ -42,7 +42,7 @@ func signIn(ctx *gin.Context) {
 }
 
 // TODO: Fix and finish me
-func logOut(ctx *gin.Context) {
+func logout(ctx *gin.Context) {
   user := ctx.MustGet(gin.BindKey).(*store.User)
 
   user, err := store.Authenticate(user.Username, user.Password)

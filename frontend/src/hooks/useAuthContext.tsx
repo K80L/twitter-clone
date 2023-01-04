@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   ReactNode,
   useCallback,
@@ -15,9 +15,9 @@ type AuthContextType = {
   user?: usersApi.User;
   isLoading: boolean;
   error?: any;
-  logIn: ({ username, password }: sessionApi.LoginCredentials) => void;
-  signUp: ({ username, password }: sessionApi.LoginCredentials) => void;
-  logOut: () => void;
+  login: ({ username, password }: sessionApi.LoginCredentials) => void;
+  signup: ({ username, password }: sessionApi.LoginCredentials) => void;
+  logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -38,7 +38,7 @@ export function AuthProvider({
   // if we change location, reset the error state
   useEffect(() => {
     if (error) setError(null);
-  }, [error, location.pathname]);
+  }, [location.pathname]);
 
   // check if there is an active session when the provider is first mounted
   // if there is an error, that means there is no session
@@ -51,7 +51,7 @@ export function AuthProvider({
       .finally(() => setIsLoadingInitial(false));
   });
 
-  const logIn = useCallback(
+  const login = useCallback(
     function ({ username, password }: sessionApi.LoginCredentials) {
       setIsLoading(true);
 
@@ -68,12 +68,12 @@ export function AuthProvider({
     [navigate]
   );
 
-  const signUp = useCallback(
+  const signup = useCallback(
     function ({ username, password }: sessionApi.LoginCredentials) {
       setIsLoading(true);
 
       usersApi
-        .signUp({ username, password })
+        .signup({ username, password })
         .then((user: usersApi.User) => {
           setUser(user);
           navigate('/');
@@ -84,7 +84,7 @@ export function AuthProvider({
     [navigate]
   );
 
-  const logOut: any = useCallback(function () {
+  const logout: any = useCallback(function () {
     sessionApi.logout().then(() => setUser(undefined));
   }, []);
 
@@ -97,11 +97,11 @@ export function AuthProvider({
       user,
       isLoading,
       error,
-      logIn,
-      signUp,
-      logOut,
+      login,
+      signup,
+      logout,
     }),
-    [user, isLoading, error, logIn, logOut, signUp]
+    [user, isLoading, error, login, logout, signup]
   );
 
   return (

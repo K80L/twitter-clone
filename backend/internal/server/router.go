@@ -51,7 +51,7 @@ func setRouter(cfg conf.Config) *gin.Engine {
 	authorized := router.Group("/")
 	authorized.Use(authorization)
 	{
-		authorized.GET("/logout/:userId", logOut)
+		authorized.GET("/logout/:userId", logout)
 		authorized.GET("/", checkIfTokenIsValid)
 		authorized.GET("/tweets", indexTweets)
 		authorized.POST("/tweets", createTweet)

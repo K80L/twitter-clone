@@ -1,12 +1,15 @@
-import { useState } from 'react';
-import { login } from '../../api/sessions';
+import { useState, FormEvent } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import useAuthContext from '../../hooks/useAuthContext';
 import './styles.css';
 
 export default function Login({ setToken }: any): JSX.Element {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const { login, isLoading, error } = useAuthContext();
+  const navigate = useNavigate();
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>, type: string) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>, type?: string) {
     if (type === 'user') {
       setUsername(e.target.value);
     } else {
@@ -14,12 +17,11 @@ export default function Login({ setToken }: any): JSX.Element {
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    const loginResponse = await login({ username, password });
-
-    loginResponse?.jwt && setToken(loginResponse.jwt);
+    login({ username, password });
+    navigate('/home');
   };
 
   return (
@@ -28,21 +30,25 @@ export default function Login({ setToken }: any): JSX.Element {
         <input
           type="text"
           placeholder="Username"
-          onChange={(e) => handleChange(e, 'user')}
           value={username}
+          onChange={(e) => handleChange(e, 'user')}
         />
       </div>
       <div className="login-item">
         <input
           type="password"
           placeholder="Password"
-          onChange={(e) => handleChange(e, 'pass')}
           value={password}
+          onChange={handleChange}
         />
       </div>
       <div>
-        <button type="submit">Sign in</button>
+        <button disabled={isLoading} type="submit">
+          Sign in
+        </button>
       </div>
+      {error && <p>Bad login/password</p>}
+      <Link to="/signup">Sign up</Link>
     </form>
   );
 }

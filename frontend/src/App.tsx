@@ -1,5 +1,11 @@
-import { useState, useEffect } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  RouteProps,
+  Routes,
+  useLocation,
+} from 'react-router-dom';
 import './App.css';
 import { Header } from './components/Header/Header';
 import Dashboard from './components/Dashboard/Dashboard';
@@ -11,43 +17,54 @@ import useToken from './components/Login/useToken';
 import { authorizeToken } from './api/sessions';
 import useAuthContext, { AuthProvider } from './hooks/useAuthContext';
 
-function App() {
-  const { token, setToken } = useToken();
-  const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    try {
-      authorizeToken(token, setIsTokenValid);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [token]);
-
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (!isTokenValid) {
-    return <Login setToken={setToken} />;
-  }
+function PrivateRoute({ children }: RouteProps): JSX.Element {
+  const location = useLocation();
+  const { user } = useAuthContext();
 
   return (
-    <AuthProvider>
-      <div className="wrapper">
-        <Header />
-        <BrowserRouter>
+    <>
+      {user ? (
+        children
+      ) : (
+        <Navigate to="/login" replace state={{ path: location.pathname }} />
+      )}
+    </>
+  );
+}
+
+function App() {
+  const { isLoading } = useAuthContext();
+
+  if (isLoading) return <Loader />;
+
+  return (
+    <div className="wrapper">
+      <Header />
+      <BrowserRouter>
+        <AuthProvider>
           <Routes>
             <Route path="/" element={<Navigate to="/home" />} />
             <Route path="/home" element={<Home />}></Route>
-            <Route path="/tweets" element={<Dashboard />}></Route>
-            <Route path="/preferences" element={<Preferences />}></Route>
+            <Route
+              path="/dashboard"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            ></Route>
+            <Route
+              path="/preferences"
+              element={
+                <PrivateRoute>
+                  <Preferences />
+                </PrivateRoute>
+              }
+            ></Route>
           </Routes>
-        </BrowserRouter>
-      </div>
-    </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </div>
   );
 }
 

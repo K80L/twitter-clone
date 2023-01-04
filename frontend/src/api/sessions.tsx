@@ -1,5 +1,7 @@
 import { BASE_REQUEST_OPTIONS, API_ROUTES } from '../utils/constants';
 import * as usersApi from '../api/users';
+import useAuthContext from '../hooks/useAuthContext';
+
 export type LoginCredentials = {
   username: string;
   password: string;
@@ -10,6 +12,9 @@ export type AuthorizedResponse = {
   data: boolean;
 };
 
+// type LoginResponse = {
+//   jwt: string;
+// }
 export async function login({
   username,
   password,
