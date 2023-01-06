@@ -10,9 +10,12 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import * as sessionApi from '../api/sessions';
 import * as usersApi from '../api/users';
+import useToken from './useToken';
+import { authorizeToken } from '../api/sessions';
 
 type AuthContextType = {
   user?: usersApi.User;
+  token?: string;
   isLoading: boolean;
   error?: any;
   login: ({ username, password }: sessionApi.LoginCredentials) => void;
@@ -28,9 +31,11 @@ export function AuthProvider({
   children: ReactNode;
 }): JSX.Element {
   const [user, setUser] = useState<usersApi.User>();
+  // const [user, setUser] = useState<sessionApi.AuthorizedResponse>();
   const [error, setError] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingInitial, setIsLoadingInitial] = useState<boolean>(true);
+  const { token, setToken } = useToken();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,18 +43,19 @@ export function AuthProvider({
   // if we change location, reset the error state
   useEffect(() => {
     if (error) setError(null);
-  }, [location.pathname]);
+  }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // check if there is an active session when the provider is first mounted
   // if there is an error, that means there is no session
   // finally, signal that the initial load is over
   useEffect(() => {
+    authorizeToken(token);
     usersApi
       .getCurrentUser()
       .then((user) => setUser(user))
       .catch((_error: any) => {})
       .finally(() => setIsLoadingInitial(false));
-  });
+  }, [token]);
 
   const login = useCallback(
     function ({ username, password }: sessionApi.LoginCredentials) {
@@ -57,12 +63,16 @@ export function AuthProvider({
 
       sessionApi
         .login({ username, password })
-        .then((user) => {
-          user && setUser(user);
+        .then((data) => {
+          console.log(data);
+          data && setToken(data.jwt);
           setIsLoading(false);
           navigate('/');
         })
-        .catch((_error) => setError(_error))
+        .catch((_error) => {
+          console.log(_error);
+          setError(_error);
+        })
         .finally(() => setIsLoading(false));
     },
     [navigate]
@@ -95,13 +105,14 @@ export function AuthProvider({
   const memoizedValue = useMemo(
     () => ({
       user,
+      token,
       isLoading,
       error,
       login,
       signup,
       logout,
     }),
-    [user, isLoading, error, login, logout, signup]
+    [user, token, isLoading, error, login, logout, signup]
   );
 
   return (

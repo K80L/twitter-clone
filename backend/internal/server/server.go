@@ -33,11 +33,11 @@ func Start(cfg conf.Config) {
 	router := setRouter(conf.NewConfig("dev"))
 
 	server := &http.Server{
-		Addr: cfg.Host + ":" + cfg.Port,
+		Addr:    cfg.Host + ":" + cfg.Port,
 		Handler: router,
 	}
 
-	// Initializing the server in a goroutine so that 
+	// Initializing the server in a goroutine so that
 	// it won't block the graceful shutdown handling below
 	go func() {
 		if err := server.ListenAndServe(); err != nil && errors.Is(err, http.ErrServerClosed) {
@@ -50,9 +50,9 @@ func Start(cfg conf.Config) {
 	quit := make(chan os.Signal)
 	// kill (no param) default send syscall.SIGTERM
 	// kill -2 is syscall.SIGINT
-	// kill -9 is syscall.SIGKILL but can't be catch, so don't need to add it 
+	// kill -9 is syscall.SIGKILL but can't be catch, so don't need to add it
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<- quit
+	<-quit
 	log.Info().Msg("Shutting down server...")
 
 	// The context is used to inform the server that it has 5 seconds to finish
@@ -66,4 +66,3 @@ func Start(cfg conf.Config) {
 
 	log.Info().Msg("Server exiting.")
 }
-

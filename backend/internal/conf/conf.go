@@ -7,26 +7,26 @@ import (
 )
 
 const (
-	hostKey = "TWIT_HOST"
-	portKey = "TWIT_PORT"
-	dbHostKey = "TWIT_DB_HOST"
-	dbPortKey = "TWIT_DB_PORT"
-	dbNameKey = "TWIT_DB_NAME"
-	dbUserKey = "TWIT_DB_USER"
+	hostKey       = "TWIT_HOST"
+	portKey       = "TWIT_PORT"
+	dbHostKey     = "TWIT_DB_HOST"
+	dbPortKey     = "TWIT_DB_PORT"
+	dbNameKey     = "TWIT_DB_NAME"
+	dbUserKey     = "TWIT_DB_USER"
 	dbPasswordKey = "TWIT_DB_PASSWORD"
-	jwtSecretKey = "TWIT_JWT_SECRET"
+	jwtSecretKey  = "TWIT_JWT_SECRET"
 )
 
 type Config struct {
-	Host string
-	Port string
-	DbHost string
-	DbPort string
-	DbName string
-	DbUser string
+	Host       string
+	Port       string
+	DbHost     string
+	DbPort     string
+	DbName     string
+	DbUser     string
 	DbPassword string
-	JwtSecret string
-	Env string
+	JwtSecret  string
+	Env        string
 }
 
 func NewConfig(env string) Config {
@@ -58,7 +58,7 @@ func NewConfig(env string) Config {
 	if !ok || dbName == "" {
 		logAndPanic(dbNameKey)
 	}
-	
+
 	dbUser, ok := os.LookupEnv(dbUserKey)
 	if !ok || dbUser == "" {
 		logAndPanic(dbUserKey)
@@ -75,14 +75,14 @@ func NewConfig(env string) Config {
 	}
 
 	return Config{
-		Host: host,
-		Port: port,
-		DbHost: dbHost,
-		DbPort: dbPort,
-		DbName: dbName,
-		DbUser: dbUser,
+		Host:       host,
+		Port:       port,
+		DbHost:     dbHost,
+		DbPort:     dbPort,
+		DbName:     dbName,
+		DbUser:     dbUser,
 		DbPassword: dbPassword,
-		JwtSecret: jwtSecret,
+		JwtSecret:  jwtSecret,
 	}
 }
 

@@ -38,13 +38,14 @@ func setRouter(cfg conf.Config) *gin.Engine {
 
 	// create API route group
 	// use customErrors defined in middleware.go
-	// we are trying to bind request data before even hitting the signUp and signIn handlers
+	// we are trying to bind request data before even hitting the signUp and login handlers
 	// with binding like this, handlers don't need to think about binding errors because there was none if the handler is reached!!
 	api := router.Group("/api")
 	api.Use(customErrors)
 	{
+		api.GET("/validateToken", checkIfTokenIsValid)
 		api.POST("/signup", gin.Bind(store.User{}), signUp)
-		api.POST("/signin", gin.Bind(store.User{}), signIn)
+		api.POST("/login", gin.Bind(store.User{}), login)
 	}
 
 	// TODO: Make sure it's hitting authorized
@@ -52,7 +53,6 @@ func setRouter(cfg conf.Config) *gin.Engine {
 	authorized.Use(authorization)
 	{
 		authorized.GET("/logout/:userId", logout)
-		authorized.GET("/", checkIfTokenIsValid)
 		authorized.GET("/tweets", indexTweets)
 		authorized.POST("/tweets", createTweet)
 		authorized.PUT("/tweets", updateTweet)

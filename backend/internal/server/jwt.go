@@ -92,8 +92,3 @@ func verifyJWT(tokenStr string) (int, error) {
 
 	return id, err
 }
-
-// func verifyJWTFromFrontend(ctx *gin.Context) {
-// 	paramToken := ctx.Param("token")
-// 	token, err := strconv.Atoi()
-// }

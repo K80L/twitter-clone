@@ -1,13 +1,12 @@
 import { useState, FormEvent } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import useAuthContext from '../../hooks/useAuthContext';
 import './styles.css';
 
-export default function Login({ setToken }: any): JSX.Element {
+export default function Login(): JSX.Element {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const { login, isLoading, error } = useAuthContext();
-  const navigate = useNavigate();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>, type?: string) {
     if (type === 'user') {
@@ -17,11 +16,10 @@ export default function Login({ setToken }: any): JSX.Element {
     }
   }
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     login({ username, password });
-    navigate('/home');
   };
 
   return (
