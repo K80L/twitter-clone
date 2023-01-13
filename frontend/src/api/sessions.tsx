@@ -1,5 +1,4 @@
 import { BASE_REQUEST_OPTIONS, API_ROUTES } from '../utils/constants';
-import * as usersApi from '../api/users';
 
 export type LoginCredentials = {
   username: string;
@@ -39,12 +38,22 @@ export async function login({
 }
 
 // TODO: Implement logout function
-export async function logout() {}
+export function logout() {
+  localStorage.removeItem('token');
+}
 
 export async function authorizeToken(
-  token: string
-  // setIsTokenValid: React.Dispatch<React.SetStateAction<boolean>>
+  token: string,
+  setToken: (token: string | null) => void,
+  logout: () => void
 ): Promise<AuthorizedResponse> {
+  if (!token) {
+    return {
+      msg: 'No token',
+      data: false,
+    };
+  }
+
   try {
     const response = await fetch('http://localhost:8080/api/validateToken', {
       method: 'GET',
@@ -56,16 +65,17 @@ export async function authorizeToken(
     });
 
     if (!response.ok) {
+      // there was some kind of error... what should we do here?
+      // should we force them to relog?
+      logout();
+      setToken(null);
       throw new Error('Error authorizing token');
     }
 
     return await response.json();
-
-    // const resp: AuthorizedResponse = await response.json();
-    // setIsTokenValid(resp.data);
-    // return resp;
   } catch (e) {
-    console.error(e);
-    throw new Error(`There was an error authorizing this token: ${token}`);
+    throw new Error(
+      `There was an error authorizing this token, you will be logged out: ${token}`
+    );
   }
 }

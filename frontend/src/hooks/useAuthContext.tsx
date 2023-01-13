@@ -40,6 +40,12 @@ export function AuthProvider({
   const navigate = useNavigate();
   const location = useLocation();
 
+  const logout: any = useCallback(function () {
+    console.log('AAAAAAAAAAAA');
+    sessionApi.logout();
+    setUser(undefined);
+  }, []);
+
   // if we change location, reset the error state
   useEffect(() => {
     if (error) setError(null);
@@ -49,13 +55,24 @@ export function AuthProvider({
   // if there is an error, that means there is no session
   // finally, signal that the initial load is over
   useEffect(() => {
-    authorizeToken(token);
     usersApi
       .getCurrentUser()
       .then((user) => setUser(user))
       .catch((_error: any) => {})
       .finally(() => setIsLoadingInitial(false));
-  }, [token]);
+  }, []);
+
+  /**
+   * This useEffect is used for authorizing the token on render and rerender
+   */
+  useEffect(() => {
+    console.log('GGGGGGGGGGGGGGGGGG');
+    setIsLoading(true);
+    authorizeToken(token, setToken, logout).then(() => {
+      console.log('FFFFFFFFFFFFFFFF');
+      setIsLoading(false);
+    });
+  }, [token, setToken, logout]);
 
   const login = useCallback(
     function ({ username, password }: sessionApi.LoginCredentials) {
@@ -75,7 +92,7 @@ export function AuthProvider({
         })
         .finally(() => setIsLoading(false));
     },
-    [navigate]
+    [setToken, navigate]
   );
 
   const signup = useCallback(
@@ -93,10 +110,6 @@ export function AuthProvider({
     },
     [navigate]
   );
-
-  const logout: any = useCallback(function () {
-    sessionApi.logout().then(() => setUser(undefined));
-  }, []);
 
   // only rerender the provider when the user, error, or loading state changes
   //

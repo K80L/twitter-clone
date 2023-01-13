@@ -15,29 +15,18 @@ import Home from './components/Home/Home';
 import Login from './components/Login/Login';
 import Loader from './components/Loader/Loader';
 import useAuthContext, { AuthProvider } from './hooks/useAuthContext';
-import { authorizeToken } from './api/sessions';
+import Nav from './components/Nav/Nav';
+import Explore from './components/Explore/Explore';
 
 function PrivateRoute({ children }: RouteProps): JSX.Element {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isValid, setIsValid] = useState<boolean>();
-
   const location = useLocation();
-  const { token } = useAuthContext();
-  // add verify jwt token functionality here
-  if (token) {
-    authorizeToken(token).then((response) => {
-      const isValid = response.data;
-      console.log(response.data);
-      setIsValid(isValid);
-      setIsLoading(false);
-    });
-  } else {
-    return <Navigate to="/login" replace state={{ path: location.pathname }} />;
-  }
+  const { token, isLoading } = useAuthContext();
+  console.log(token);
 
+  // if we receive a token back from useAuthContext, that means the token is valid
   return isLoading ? (
     <Loader />
-  ) : isValid ? (
+  ) : token ? (
     <>{children}</>
   ) : (
     <Navigate to="/login" replace state={{ path: location.pathname }} />
@@ -54,9 +43,11 @@ function App() {
       <Header />
       <BrowserRouter>
         <AuthProvider>
+          <Nav />
           <Routes>
             <Route path="/" element={<Navigate to="/home" />} />
             <Route path="/home" element={<Home />}></Route>
+            <Route path="/explore" element={<Explore />}></Route>
             <Route path="/login" element={<Login />}></Route>
             <Route
               path="/dashboard"
