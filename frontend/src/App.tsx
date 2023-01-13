@@ -21,7 +21,6 @@ import Explore from './components/Explore/Explore';
 function PrivateRoute({ children }: RouteProps): JSX.Element {
   const location = useLocation();
   const { token, isLoading } = useAuthContext();
-  console.log(token);
 
   // if we receive a token back from useAuthContext, that means the token is valid
   return isLoading ? (
@@ -34,7 +33,7 @@ function PrivateRoute({ children }: RouteProps): JSX.Element {
 }
 
 function App() {
-  const { isLoading } = useAuthContext();
+  const { token, isLoading } = useAuthContext();
 
   if (isLoading) return <Loader />;
 

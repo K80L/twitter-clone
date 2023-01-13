@@ -6,8 +6,9 @@ import './styles.css';
 export default function Login(): JSX.Element {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const { login, isLoading, error } = useAuthContext();
+  const { token, login, isLoading, error } = useAuthContext();
 
+  console.log(token);
   function handleChange(e: React.ChangeEvent<HTMLInputElement>, type?: string) {
     if (type === 'user') {
       setUsername(e.target.value);

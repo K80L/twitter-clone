@@ -40,11 +40,15 @@ export function AuthProvider({
   const navigate = useNavigate();
   const location = useLocation();
 
-  const logout: any = useCallback(function () {
-    console.log('AAAAAAAAAAAA');
-    sessionApi.logout();
-    setUser(undefined);
-  }, []);
+  const logout: any = useCallback(
+    function () {
+      sessionApi.logout();
+      setUser(undefined);
+      setToken(null);
+      navigate('/login');
+    },
+    [setToken, navigate]
+  );
 
   // if we change location, reset the error state
   useEffect(() => {
@@ -66,10 +70,8 @@ export function AuthProvider({
    * This useEffect is used for authorizing the token on render and rerender
    */
   useEffect(() => {
-    console.log('GGGGGGGGGGGGGGGGGG');
     setIsLoading(true);
     authorizeToken(token, setToken, logout).then(() => {
-      console.log('FFFFFFFFFFFFFFFF');
       setIsLoading(false);
     });
   }, [token, setToken, logout]);
