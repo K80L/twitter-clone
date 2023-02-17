@@ -16,31 +16,35 @@ export function getTokenFromLocalStorage(): string | null {
   return localStorage.getItem('token');
 }
 
-// Customzed fetch function that adds authorization header
-// TODO: Improve error handling, etc..
-export async function customFetch({
-  url,
-  jwt,
-  requestMethod,
-  requestBody,
-}: CustomFetch) {
-  const fetchData: CustomFetchData = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: requestMethod,
-  };
+export function logout() {
+  localStorage.removeItem('token');
+}
 
-  if (jwt) fetchData.headers.Authorization = 'Bearer ' + jwt;
+// This function attaches the JWT token to each request
+// and logs out if unverified.
+// Use this to send ALL requests.
+export async function authorizedRequest(
+  url: string,
+  options: RequestInit = {}
+) {
+  console.log('AAAAAAAAAAAA');
+  const token = localStorage.getItem('token');
 
-  if (requestBody) fetchData.body = JSON.stringify(requestBody);
+  if (token) {
+    options.headers = options.headers || {};
+    if (!(options.headers instanceof Headers)) {
+      options.headers = new Headers(options.headers);
+    }
+    options.headers.set('Authorization', `Bearer ${token}`);
+  }
 
-  const response = await fetch(url, fetchData);
-  if (response.ok) return await response.json();
+  const response = await fetch(url, options);
 
-  // return fetch(url, fetchData).then((response) => {
-  //   if (response.ok) return response.json();
-  // });
+  if (response.status === 401) {
+    logout();
+  }
+
+  return response;
 }
 
 export function isJsonString(str: string): boolean {

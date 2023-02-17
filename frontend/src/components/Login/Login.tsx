@@ -1,4 +1,4 @@
-import { useState, FormEvent } from 'react';
+import { useState, useRef, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import useAuthContext from '../../hooks/useAuthContext';
 import './styles.css';
@@ -6,9 +6,9 @@ import './styles.css';
 export default function Login(): JSX.Element {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const { token, login, isLoading, error } = useAuthContext();
+  const { login, isLoading, error } = useAuthContext();
+  const activeElement = useRef(null);
 
-  console.log(token);
   function handleChange(e: React.ChangeEvent<HTMLInputElement>, type?: string) {
     if (type === 'user') {
       setUsername(e.target.value);
@@ -25,29 +25,45 @@ export default function Login(): JSX.Element {
 
   return (
     <form className="login-wrapper" onSubmit={handleSubmit}>
-      <div className="login-item">
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => handleChange(e, 'user')}
-        />
-      </div>
-      <div className="login-item">
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={handleChange}
-        />
-      </div>
       <div>
-        <button disabled={isLoading} type="submit">
+        <div className="login__item">
+          <label className="login__label blue" htmlFor="username">
+            Username
+          </label>
+          <input
+            id="username"
+            type="text"
+            placeholder="Username"
+            className="login__input"
+            value={username}
+            onChange={(e) => handleChange(e, 'user')}
+          />
+        </div>
+        <div className="login__item">
+          <label className="login__label blue" htmlFor="password">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Password"
+            className="login__input"
+            value={password}
+            onChange={handleChange}
+          />
+        </div>
+      </div>
+      <div className="login__button-group">
+        <button className="login__button" disabled={isLoading} type="submit">
           Sign in
         </button>
+        {error && (
+          <p className="login__message-error">Bad username or password</p>
+        )}
+        <Link className="signup__link" to="/signup">
+          <button className="signup__button">Create account</button>
+        </Link>
       </div>
-      {error && <p>Bad login/password</p>}
-      <Link to="/signup">Sign up</Link>
     </form>
   );
 }
