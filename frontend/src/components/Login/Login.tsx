@@ -1,16 +1,16 @@
-import { useState, useRef, FormEvent } from 'react';
-import { Link } from 'react-router-dom';
-import useAuthContext from '../../hooks/useAuthContext';
-import './styles.css';
+import { useState, useRef, FormEvent } from "react";
+import { Link } from "react-router-dom";
+import useAuthContext from "../../hooks/useAuthContext";
+import "./styles.css";
 
 export default function Login(): JSX.Element {
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const { login, isLoading, error } = useAuthContext();
   const activeElement = useRef(null);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>, type?: string) {
-    if (type === 'user') {
+    if (type === "user") {
       setUsername(e.target.value);
     } else {
       setPassword(e.target.value);
@@ -36,7 +36,7 @@ export default function Login(): JSX.Element {
             placeholder="Username"
             className="login__input"
             value={username}
-            onChange={(e) => handleChange(e, 'user')}
+            onChange={(e) => handleChange(e, "user")}
           />
         </div>
         <div className="login__item">
@@ -54,14 +54,28 @@ export default function Login(): JSX.Element {
         </div>
       </div>
       <div className="login__button-group">
-        <button className="login__button" disabled={isLoading} type="submit">
+        <button
+          className="
+            btn--secondary 
+            btn--rounded 
+            btn--full-width"
+          disabled={isLoading}
+          type="submit"
+        >
           Sign in
         </button>
         {error && (
           <p className="login__message-error">Bad username or password</p>
         )}
         <Link className="signup__link" to="/signup">
-          <button className="signup__button">Create account</button>
+          <button
+            className="
+              btn--primary
+              btn--rounded
+              btn--full-width"
+          >
+            Create account
+          </button>
         </Link>
       </div>
     </form>

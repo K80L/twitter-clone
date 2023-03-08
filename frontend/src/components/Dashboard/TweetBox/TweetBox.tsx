@@ -1,6 +1,6 @@
 function TweetBox() {
   function handleSubmit(): void {
-    console.log('Posting to tweeter!!');
+    console.log("Posting to tweeter!!");
   }
 
   return (
@@ -9,7 +9,7 @@ function TweetBox() {
       <div className="tweet-message-container">
         <input
           type="text"
-          className="tweet-message"
+          className="tweet__input"
           placeholder="What's happening?"
         />
         <div className="tweet-options-row">

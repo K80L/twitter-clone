@@ -32,7 +32,7 @@ export default function Nav() {
     <header className="header">
       <div className="overflow-auto full-height flex-col-end">
         <Header />
-        <ul className="header-list">
+        <ul className="header--list">
           {buildNavItems()}
           {logoutButton()}
         </ul>

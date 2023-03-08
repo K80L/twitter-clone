@@ -1,5 +1,11 @@
-.header-list {
+.header {
+  width: 100%;
+}
+.header--list {
   list-style-type: none;
+  position: fixed;
+  height: 100%;
+  width: 88px;
 }
 
 .overflow-auto {
