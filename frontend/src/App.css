@@ -1,12 +1,15 @@
 .wrapper {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .main {
-  border-right-style: solid;
-  border-left-style: solid;
-  border-right-width: 1px;
-  border-left-width: 1px;
-  border-color: rgb(47, 51, 54);
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: row;
+}
+
+.placeholder {
+  width: 350px;
 }

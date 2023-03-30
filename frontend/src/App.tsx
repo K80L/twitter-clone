@@ -5,16 +5,16 @@ import {
   RouteProps,
   Routes,
   useLocation,
-} from 'react-router-dom';
-import './App.css';
-import Dashboard from './components/Dashboard/Dashboard';
-import Preferences from './components/Preferences/Preferences';
-import Home from './components/Home/Home';
-import Login from './components/Login/Login';
-import Loader from './components/Loader/Loader';
-import useAuthContext, { AuthProvider } from './hooks/useAuthContext';
-import Nav from './components/Nav/Nav';
-import Explore from './components/Explore/Explore';
+} from "react-router-dom";
+import "./App.css";
+import Dashboard from "./components/Dashboard/Dashboard";
+import Preferences from "./components/Preferences/Preferences";
+import Home from "./components/Home/Home";
+import Login from "./components/Login/Login";
+import Loader from "./components/Loader/Loader";
+import useAuthContext, { AuthProvider } from "./hooks/useAuthContext";
+import Nav from "./components/Nav/Nav";
+import Explore from "./components/Explore/Explore";
 
 function PrivateRoute({ children }: RouteProps): JSX.Element {
   const location = useLocation();
@@ -63,6 +63,7 @@ function App() {
                 }
               ></Route>
             </Routes>
+            <div className="placeholder"></div>
           </main>
         </AuthProvider>
       </BrowserRouter>

@@ -1,5 +1,5 @@
-import TweetBox from './TweetBox/TweetBox';
-import './styles.css';
+import TweetBox from "./TweetBox/TweetBox";
+import "./styles.css";
 
 export default function Dashboard() {
   return (

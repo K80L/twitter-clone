@@ -1,3 +1,5 @@
+import "./styles.css";
+
 function TweetBox() {
   function handleSubmit(): void {
     console.log("Posting to tweeter!!");

@@ -4,7 +4,7 @@
   align-items: center;
   flex-direction: column;
   padding-left: 1em;
-  width: 100%;
+  width: 33%;
 }
 
 .login__item {
@@ -15,7 +15,6 @@
 
 .login__input {
   width: 100%;
-  color: #000;
 }
 
 .login__label {

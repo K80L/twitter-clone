@@ -11,7 +11,8 @@ import (
 )
 
 // createTweet is the Gin handler function to create a new tweet
-// it will call addTweet function from /store/tweets.go
+// it will call addTweet function from /store/tweets.go to communicate with the
+// db and actually create the tweet object in storage
 func createTweet(ctx *gin.Context) {
 	tweet := new(store.Tweet)
 	if err := ctx.Bind(tweet); err != nil {

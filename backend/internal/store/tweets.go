@@ -17,6 +17,7 @@ type Tweet struct {
 
 // reminder, only packages in the store can communicate with the database
 // AddTweet is the actual function that communicates with the database to create a new Tweet
+// This gets called by server/tweet.go
 func AddTweet(user *User, tweet *Tweet) error {
 	tweet.UserID = user.ID
 	_, err := db.Model(tweet).Returning("*").Insert()
