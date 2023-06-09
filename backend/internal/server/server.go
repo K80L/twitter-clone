@@ -17,6 +17,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// This is the actual web service package.
+// This package communicates with store.go which communicates with the database.
+
 // graceful shutdown
 // see https://github.com/gin-gonic/gin#graceful-shutdown-or-restart
 

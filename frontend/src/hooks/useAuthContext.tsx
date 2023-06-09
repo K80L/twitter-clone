@@ -6,12 +6,12 @@ import {
   useEffect,
   useMemo,
   useState,
-} from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import * as sessionApi from '../api/sessions';
-import * as usersApi from '../api/users';
-import useToken from './useToken';
-import { authorizeToken } from '../api/sessions';
+} from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import * as sessionApi from "../api/sessions";
+import * as usersApi from "../api/users";
+import useToken from "./useToken";
+import { authorizeToken } from "../api/sessions";
 
 type AuthContextType = {
   user?: usersApi.User;
@@ -25,13 +25,8 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-export function AuthProvider({
-  children,
-}: {
-  children: ReactNode;
-}): JSX.Element {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<usersApi.User>();
-  // const [user, setUser] = useState<sessionApi.AuthorizedResponse>();
   const [error, setError] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingInitial, setIsLoadingInitial] = useState<boolean>(true);
@@ -45,7 +40,7 @@ export function AuthProvider({
       sessionApi.logout();
       setUser(undefined);
       setToken(null);
-      navigate('/login');
+      navigate("/login");
     },
     [setToken, navigate]
   );
@@ -55,9 +50,11 @@ export function AuthProvider({
     if (error) setError(null);
   }, [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // check if there is an active session when the provider is first mounted
-  // if there is an error, that means there is no session
-  // finally, signal that the initial load is over
+  /**
+   * check if there is an active session when the provider is first mounted
+   * if there is an error, that means there is no session
+   * finally, signal that the initial load is over
+   */
   useEffect(() => {
     usersApi
       .getCurrentUser()
@@ -70,6 +67,7 @@ export function AuthProvider({
    * This useEffect is used for authorizing the token on render and rerender
    */
   useEffect(() => {
+    console.log("ZZZZZZZZZZZZZZZZZZZZZZ");
     setIsLoading(true);
     authorizeToken(token, setToken, logout).then(() => {
       setIsLoading(false);
@@ -86,7 +84,7 @@ export function AuthProvider({
           console.log(data);
           data && setToken(data.jwt);
           setIsLoading(false);
-          navigate('/');
+          navigate("/");
         })
         .catch((_error) => {
           console.log(_error);
@@ -105,7 +103,7 @@ export function AuthProvider({
         .signup({ username, password })
         .then((user: usersApi.User) => {
           setUser(user);
-          navigate('/');
+          navigate("/");
         })
         .catch((_error: any) => setError(_error))
         .finally(() => setIsLoading(false));

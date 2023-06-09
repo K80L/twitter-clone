@@ -1,12 +1,14 @@
 package store
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/go-pg/pg/v10/orm"
 	"github.com/rs/zerolog/log"
 )
 
+// Our Tweet model - This is what we are storing in the DB
 type Tweet struct {
 	ID        int
 	Content   string `binding:"required,min=1,max=144"`
@@ -28,15 +30,28 @@ func AddTweet(user *User, tweet *Tweet) error {
 }
 
 func FetchUserTweets(user *User) error {
+	fmt.Println("inside tweets.go at function FetchUserTweets")
+	// tweets := make([]*Tweet, 0)
+
 	err := db.Model(user).
+		WherePK(). // NEED THIS KEY WherePK CLAUSE!!!
 		Relation("Tweets", func(q *orm.Query) (*orm.Query, error) {
 			return q.Order("id ASC"), nil
 		}).
 		Select()
+
+	// We are hitting this error for some reason
 	if err != nil {
 		log.Error().Err(err).Msg("Error fetching user's tweets")
 	}
+
+	fmt.Println("22222222222222222")
 	return err
+}
+
+func FetchTweetsById(id int) {
+	// TODO
+	return
 }
 
 func FetchTweet(id int) (*Tweet, error) {

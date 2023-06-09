@@ -6,6 +6,8 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./App.css";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Preferences from "./components/Preferences/Preferences";
@@ -30,6 +32,18 @@ function PrivateRoute({ children }: RouteProps): JSX.Element {
   );
 }
 
+/**
+ * Create the react-query client and set default options
+ */
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+      cacheTime: Infinity,
+    },
+  },
+});
+
 function App() {
   const { isLoading } = useAuthContext();
 
@@ -38,35 +52,39 @@ function App() {
   return (
     <div className="wrapper">
       <BrowserRouter>
-        <AuthProvider>
-          <Nav />
-          <main className="main">
-            <Routes>
-              <Route path="/" element={<Navigate to="/home" />} />
-              <Route path="/home" element={<Home />}></Route>
-              <Route path="/explore" element={<Explore />}></Route>
-              <Route path="/login" element={<Login />}></Route>
-              <Route
-                path="/dashboard"
-                element={
-                  <PrivateRoute>
-                    <Dashboard />
-                  </PrivateRoute>
-                }
-              ></Route>
-              <Route
-                path="/preferences"
-                element={
-                  <PrivateRoute>
-                    <Preferences />
-                  </PrivateRoute>
-                }
-              ></Route>
-            </Routes>
-            <div className="placeholder"></div>
-          </main>
-        </AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <Nav />
+            <main className="main">
+              <Routes>
+                <Route path="/" element={<Navigate to="/home" />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/explore" element={<Explore />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <PrivateRoute>
+                      <Dashboard />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/preferences"
+                  element={
+                    <PrivateRoute>
+                      <Preferences />
+                    </PrivateRoute>
+                  }
+                />
+              </Routes>
+              <div className="placeholder"></div>
+            </main>
+          </AuthProvider>
+          <ReactQueryDevtools initialIsOpen={false} />{" "}
+        </QueryClientProvider>
       </BrowserRouter>
+      {/* This is just devtools that can be removed/hidden */}
     </div>
   );
 }

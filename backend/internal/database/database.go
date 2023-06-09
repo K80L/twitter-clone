@@ -6,7 +6,7 @@ import (
 )
 
 // to connect to database with psql:
-// $ psql twitter-clon
+// $ psql twitter-clone
 func NewDBOptions(cfg conf.Config) *pg.Options {
 	return &pg.Options{
 		Addr:     cfg.DbHost + ":" + cfg.DbPort,

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -12,9 +13,12 @@ import (
 
 // createTweet is the Gin handler function to create a new tweet
 // it will call addTweet function from /store/tweets.go to communicate with the
-// db and actually create the tweet object in storage
+// db and actually create the tweet object in memory
 func createTweet(ctx *gin.Context) {
+	// Define a new tweet object
 	tweet := new(store.Tweet)
+	// BIND the context to this newly created 'tweet' object
+	// TODO 03-29-2023: Understand ctx.Bind() from GIN framework. I'm not sure how it works.
 	if err := ctx.Bind(tweet); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -34,21 +38,30 @@ func createTweet(ctx *gin.Context) {
 	})
 }
 
-// fetch user tweets
+// fetch current user tweets
 func indexTweets(ctx *gin.Context) {
+	fmt.Println("inside tweet.go at function indexTweets")
 	user, err := currentUser(ctx)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	if err := store.FetchUserTweets(user); err != nil {
+		fmt.Println("FFFFFFFFFFFFFFFFFFFFFFFFFFF")
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	fmt.Println("3333333333333333333333")
 	ctx.JSON(http.StatusOK, gin.H{
 		"msg":  "Tweets fetched successfully",
 		"data": user.Tweets,
 	})
+}
+
+// fetch user tweets by id param
+func indexTweetsByUser(ctx *gin.Context) {
+	return
 }
 
 func updateTweet(ctx *gin.Context) {

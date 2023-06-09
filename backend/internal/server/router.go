@@ -54,6 +54,7 @@ func setRouter(cfg conf.Config) *gin.Engine {
 	{
 		authorized.GET("/logout/:userId", logout)
 		authorized.GET("/tweets", indexTweets)
+		authorized.GET("/tweets/:id", indexTweetsByUser)
 		authorized.POST("/tweets", createTweet)
 		authorized.PUT("/tweets", updateTweet)
 		authorized.DELETE("/tweets/:id", deleteTweet)

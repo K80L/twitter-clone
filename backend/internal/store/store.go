@@ -10,7 +10,8 @@ import (
 	"github.com/go-pg/pg/v10"
 )
 
-// store package will be the only thing to ever communicate with the database
+// server.go is the webservice that communicates with this package.
+// store.go package will be the only thing to ever communicate with the database
 
 // database connector for the store package
 var db *pg.DB
