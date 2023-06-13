@@ -1,7 +1,7 @@
 type CustomFetch = {
   url: string;
   jwt: string;
-  requestMethod: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  requestMethod: "GET" | "POST" | "PUT" | "DELETE";
   requestBody: any;
 };
 
@@ -13,29 +13,31 @@ type CustomFetchData = {
 };
 
 export function getTokenFromLocalStorage(): string | null {
-  return localStorage.getItem('token');
+  return localStorage.getItem("token");
 }
 
 export function logout() {
-  localStorage.removeItem('token');
+  localStorage.removeItem("token");
 }
 
 // This function attaches the JWT token to each request
 // and logs out if unverified.
-// Use this to send ALL requests.
+// TODO: Use this to send ALL requests.
 export async function authorizedRequest(
   url: string,
   options: RequestInit = {}
-) {
-  console.log('AAAAAAAAAAAA');
-  const token = localStorage.getItem('token');
+): Promise<any> {
+  let token = localStorage.getItem("token");
 
   if (token) {
     options.headers = options.headers || {};
     if (!(options.headers instanceof Headers)) {
       options.headers = new Headers(options.headers);
     }
-    options.headers.set('Authorization', `Bearer ${token}`);
+    options.headers.set(
+      "Authorization",
+      `Bearer ${token.replace(/['"]+/g, "")}`
+    );
   }
 
   const response = await fetch(url, options);
@@ -44,7 +46,11 @@ export async function authorizedRequest(
     logout();
   }
 
-  return response;
+  if (!response.ok) {
+    throw new Error("Error in: " + url);
+  }
+
+  return response.json();
 }
 
 export function isJsonString(str: string): boolean {

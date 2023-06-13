@@ -1,4 +1,4 @@
-import { API_ROUTES, BASE_REQUEST_OPTIONS } from '../utils/constants';
+import { API_ROUTES, POST_REQUEST_OPTIONS } from "../utils/constants";
 
 export type User = {
   username: string;
@@ -11,8 +11,7 @@ export type User = {
 export async function signup({ username, password }: User): Promise<User> {
   try {
     const response = await fetch(API_ROUTES.SIGN_UP, {
-      ...BASE_REQUEST_OPTIONS,
-      method: 'POST',
+      ...POST_REQUEST_OPTIONS,
       body: JSON.stringify({
         username,
         password,
@@ -26,12 +25,12 @@ export async function signup({ username, password }: User): Promise<User> {
 
     return data;
   } catch (_error) {
-    throw new Error('There was an error signing up');
+    throw new Error("There was an error signing up");
   }
 }
 
 // should attempt to grab the current user from the server if possible
 // and check if jwt is valid
 export function getCurrentUser(): Promise<User> {
-  return Promise.resolve({ username: 'batman', password: 'secret123' });
+  return Promise.resolve({ username: "batman", password: "secret123" });
 }

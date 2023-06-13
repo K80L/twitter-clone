@@ -1,4 +1,4 @@
-import { BASE_REQUEST_OPTIONS, API_ROUTES } from '../utils/constants';
+import { POST_REQUEST_OPTIONS, API_ROUTES } from "../utils/constants";
 
 export type LoginCredentials = {
   username: string;
@@ -20,8 +20,7 @@ export async function login({
 }: LoginCredentials): Promise<LoginResponse> {
   try {
     const response = await fetch(API_ROUTES.SESSION.LOGIN, {
-      ...BASE_REQUEST_OPTIONS,
-      method: 'POST',
+      ...POST_REQUEST_OPTIONS,
       body: JSON.stringify({
         username,
         password,
@@ -33,13 +32,13 @@ export async function login({
     return data;
   } catch (_error) {
     console.error(_error);
-    throw new Error('There was an error logging in');
+    throw new Error("There was an error logging in");
   }
 }
 
 // TODO: Implement logout function
 export function logout() {
-  localStorage.removeItem('token');
+  localStorage.removeItem("token");
 }
 
 export async function authorizeToken(
@@ -49,18 +48,18 @@ export async function authorizeToken(
 ): Promise<AuthorizedResponse> {
   if (!token) {
     return {
-      msg: 'No token',
+      msg: "No token",
       data: false,
     };
   }
 
   try {
-    const response = await fetch('http://localhost:8080/api/validateToken', {
-      method: 'GET',
-      cache: 'no-cache',
+    const response = await fetch("http://localhost:8080/api/validateToken", {
+      method: "GET",
+      cache: "no-cache",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
       },
     });
 
@@ -69,7 +68,7 @@ export async function authorizeToken(
       // should we force them to relog?
       logout();
       setToken(null);
-      throw new Error('Error authorizing token');
+      throw new Error("Error authorizing token");
     }
 
     return await response.json();

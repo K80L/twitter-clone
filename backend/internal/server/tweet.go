@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -39,29 +38,54 @@ func createTweet(ctx *gin.Context) {
 }
 
 // fetch current user tweets
-func indexTweets(ctx *gin.Context) {
-	fmt.Println("inside tweet.go at function indexTweets")
+func getCurrentUserTweets(ctx *gin.Context) {
 	user, err := currentUser(ctx)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	if err := store.FetchUserTweets(user); err != nil {
-		fmt.Println("FFFFFFFFFFFFFFFFFFFFFFFFFFF")
+	if err := store.GetCurrentUserTweets(user); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	fmt.Println("3333333333333333333333")
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg":  "Tweets fetched successfully",
+		"msg":  "getCurrentUserTweets fetched successfully",
 		"data": user.Tweets,
 	})
 }
 
+/*
+	get ALL tweets
+	TODO: Add in pagination
+*/
+
+func getAllTweets(ctx *gin.Context) {
+	tweets, err := store.GetAllTweets()
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":  "getTweets fetched successfully",
+		"data": tweets,
+	})
+}
+
 // fetch user tweets by id param
-func indexTweetsByUser(ctx *gin.Context) {
-	return
+func getTweetsByUserId(ctx *gin.Context) {
+	param := ctx.Param("user_id")
+	userId, err := strconv.Atoi(param)
+
+	tweets, err := store.GetTweetsByUserId(userId)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":  "fetchTweetsByUserId fetched successfully",
+		"data": tweets,
+	})
 }
 
 func updateTweet(ctx *gin.Context) {

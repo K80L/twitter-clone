@@ -1,7 +1,6 @@
 package store
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/go-pg/pg/v10/orm"
@@ -29,12 +28,21 @@ func AddTweet(user *User, tweet *Tweet) error {
 	return err
 }
 
-func FetchUserTweets(user *User) error {
-	fmt.Println("inside tweets.go at function FetchUserTweets")
-	// tweets := make([]*Tweet, 0)
+func GetAllTweets() ([]Tweet, error) {
+	tweets := make([]Tweet, 0)
 
+	err := db.Model(&tweets).Select()
+
+	if err != nil {
+		log.Error().Err(err).Msg("Error fetching all tweets")
+	}
+
+	return tweets, err
+}
+
+func GetCurrentUserTweets(user *User) error {
 	err := db.Model(user).
-		WherePK(). // NEED THIS KEY WherePK CLAUSE!!!
+		WherePK(). // `WherePK()` clause adds the primary key condition to the query
 		Relation("Tweets", func(q *orm.Query) (*orm.Query, error) {
 			return q.Order("id ASC"), nil
 		}).
@@ -42,16 +50,22 @@ func FetchUserTweets(user *User) error {
 
 	// We are hitting this error for some reason
 	if err != nil {
-		log.Error().Err(err).Msg("Error fetching user's tweets")
+		log.Error().Err(err).Msg("Error fetching current user's tweets")
 	}
 
-	fmt.Println("22222222222222222")
 	return err
 }
 
-func FetchTweetsById(id int) {
+func GetTweetsByUserId(userId int) ([]Tweet, error) {
+	tweets := make([]Tweet, 0)
 	// TODO
-	return
+	err := db.Model(&tweets).Where("user_id = ?", userId).Select()
+
+	if err != nil {
+		log.Error().Err(err).Msg("Error fetching user's tweets")
+	}
+
+	return tweets, err
 }
 
 func FetchTweet(id int) (*Tweet, error) {
