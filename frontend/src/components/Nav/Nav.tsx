@@ -1,13 +1,12 @@
-import { Link } from 'react-router-dom';
-import useAuthContext from '../../hooks/useAuthContext';
-import { Header } from '../Header/Header';
-import './styles.css';
+import { Link } from "react-router-dom";
+import useAuthContext from "../../hooks/useAuthContext";
+import { Header } from "../Header/Header";
+import "./styles.css";
 
 const navItems = {
-  home: '',
-  explore: 'explore',
-  dashboard: 'dashboard',
-  preferences: 'preferences',
+  home: "",
+  explore: "explore",
+  preferences: "preferences",
 };
 
 export default function Nav() {

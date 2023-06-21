@@ -45,7 +45,7 @@ func jwtSetup(conf conf.Config) {
 func generateJWT(user *store.User) string {
 	claims := &jwt.RegisteredClaims{
 		ID:        fmt.Sprint(user.ID),
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24 * 30)),
 	}
 
 	builder := jwt.NewBuilder(jwtSigner)

@@ -1,8 +1,0 @@
-.dashboard__container {
-  flex-grow: 1;
-  border-right-style: solid;
-  border-left-style: solid;
-  border-right-width: 1px;
-  border-left-width: 1px;
-  border-color: rgb(47, 51, 54);
-}

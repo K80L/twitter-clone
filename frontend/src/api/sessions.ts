@@ -73,6 +73,7 @@ export async function authorizeToken(
 
     return await response.json();
   } catch (e) {
+    logout();
     throw new Error(
       `There was an error authorizing this token, you will be logged out: ${token}`
     );

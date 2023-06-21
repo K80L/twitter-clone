@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -61,6 +62,7 @@ func getCurrentUserTweets(ctx *gin.Context) {
 */
 
 func getAllTweets(ctx *gin.Context) {
+	fmt.Println("LUUUUCHAAAAAA")
 	tweets, err := store.GetAllTweets()
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

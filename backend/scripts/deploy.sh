@@ -21,7 +21,13 @@ while test $# -gt 0; do
   esac
 done
 
+#### NEW WAY OF STARTING SERVER WITH AIR
 cd ../../backend
 source .env
-go build -o cmd/twitter-clone/twitter-clone cmd/twitter-clone/main.go
-cmd/twitter-clone/twitter-clone -env $env &
+air
+
+#### OLD WAY OF STARTING SERVER WITH go build AND EXECUTING THE `twitter_clone` file
+# cd ../../backend
+# source .env
+# go build -o cmd/twitter-clone/twitter-clone cmd/twitter-clone/main.go
+# cmd/twitter-clone/twitter-clone -env $env &
