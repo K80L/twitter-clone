@@ -1,4 +1,4 @@
-import "./styles.css";
+import "./styles.scss";
 
 function TweetBox() {
   function handleSubmit(): void {
@@ -6,17 +6,19 @@ function TweetBox() {
   }
 
   return (
-    <div className="tweet-container">
-      <div className="avatar-img-container"></div>
-      <div className="tweet-message-container">
+    <div className="tweet">
+      <div className="tweet__avatar-container"></div>
+      <div className="tweet__message-container">
         <input
           type="text"
           className="tweet__input"
           placeholder="What's happening?"
         />
-        <div className="tweet-options-row">
+        <div className="tweet__options">
           <div className="tweet-media-options"></div>
-          <button onClick={handleSubmit}>Submit</button>
+          <button className="tweet__submit-btn" onClick={handleSubmit}>
+            Submit
+          </button>
         </div>
       </div>
     </div>

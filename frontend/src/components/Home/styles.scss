@@ -1,0 +1,43 @@
+.home {
+  &__container {
+    flex-grow: 1;
+    border-right-style: solid;
+    border-left-style: solid;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-color: rgb(47, 51, 54);
+  }
+
+  &__placeholder {
+    width: 100%;
+    height: 110px;
+
+    &-top {
+      border: 1px solid #fff;
+      height: 50%;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    &-bottom {
+      display: flex;
+      border: 1px solid yellow;
+      height: 50%;
+
+      &--for-you {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+        border-right: 1px solid pink;
+      }
+
+      &--following {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+}

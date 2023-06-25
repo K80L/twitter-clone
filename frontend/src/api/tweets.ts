@@ -19,7 +19,6 @@ export const fetchCurrentUserTweets = async () => {
 };
 
 export const fetchAllTweets = async () => {
-  console.log("fetchAllTweets");
   try {
     return await authorizedRequest(API_ROUTES.TWEETS.GET.ALL, {
       ...GET_REQUEST_OPTIONS,

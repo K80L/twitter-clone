@@ -1,5 +1,5 @@
-import './Header.css';
+import "./Header.css";
 
 export const Header = () => {
-  return <h1 className="header-logo">Twitter</h1>;
+  return <h1 className="logo">Twitter</h1>;
 };

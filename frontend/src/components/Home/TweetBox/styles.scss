@@ -1,0 +1,38 @@
+.tweet {
+  display: flex;
+  border: 1px solid green;
+}
+
+.tweet__avatar-container {
+  height: 110px;
+  width: 15%;
+  border: 1px solid mintcream;
+}
+
+.tweet__message-container {
+  height: 110px;
+  width: 100%;
+  border: 1px solid #fff;
+}
+
+.tweet__options {
+  display: flex;
+  justify-content: flex-end;
+  align-items: end;
+  height: 50%;
+  border: 1px solid cyan;
+}
+
+.tweet__input {
+  height: 50%;
+  border: 1px solid powderblue;
+  width: 100%;
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.tweet__submit-btn {
+  border: 1px solid hotpink;
+}

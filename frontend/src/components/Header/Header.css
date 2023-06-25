@@ -1,8 +1,8 @@
-.header-logo {
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 5rem;
   background-color: #1c8cd8;
   color: white;
-  display: flex;
-  align-items: center;
-  padding: 0 2rem;
 }
