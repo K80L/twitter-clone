@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Starting our app!!")
+	fmt.Println("STARTINGGGGGGG 123123123")
 
 	// start the server from backend/server package using the cli script
 	env := cli.Parse()

@@ -11,7 +11,8 @@ import (
 	"github.com/go-pg/migrations/v8"
 )
 
-const usageText = `This program runs command on the db. Supported commands are:
+const usageText = `
+  This program runs command on the db. Supported commands are:
   - init - creates version info table in the database
   - up - runs all available migrations.
   - up [target] - runs available migrations up to the target one.
@@ -19,7 +20,8 @@ const usageText = `This program runs command on the db. Supported commands are:
   - reset - reverts all migrations.
   - version - prints current db version.
   - set_version [version] - sets db version without running migrations.
-Usage:
+
+  Usage:
   go run *.go <command> [args]
 `
 

@@ -1,3 +1,9 @@
-export default function TweetItem() {
-  return <div>Tweet Item</div>;
+import { Tweet } from "../../../api/tweets";
+
+interface TweetItemProps {
+  tweet: Tweet;
+}
+
+export default function TweetItem({ tweet }: TweetItemProps) {
+  return <div>{tweet.content}</div>;
 }

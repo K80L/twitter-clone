@@ -36,8 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const location = useLocation();
 
   const logout: any = useCallback(
-    function () {
-      console.log('new logout');
+    function() {
       sessionApi.logout();
       setUser(undefined);
       setToken(null);
@@ -60,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     usersApi
       .getCurrentUser()
       .then((user) => setUser(user))
-      .catch((_error: any) => {})
+      .catch((_error: any) => { })
       .finally(() => setIsLoadingInitial(false));
   }, []);
 
@@ -68,7 +67,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * This useEffect is used for authorizing the token on render and rerender
    */
   useEffect(() => {
-    console.log("ZZZZZZZZZZZZZZZZZZZZZZ");
     setIsLoading(true);
     authorizeToken(token, setToken, logout).then(() => {
       setIsLoading(false);
@@ -76,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [token, setToken, logout]);
 
   const login = useCallback(
-    function ({ username, password }: sessionApi.LoginCredentials) {
+    function({ username, password }: sessionApi.LoginCredentials) {
       setIsLoading(true);
 
       sessionApi
@@ -97,7 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const signup = useCallback(
-    function ({ username, password }: sessionApi.LoginCredentials) {
+    function({ username, password }: sessionApi.LoginCredentials) {
       setIsLoading(true);
 
       usersApi

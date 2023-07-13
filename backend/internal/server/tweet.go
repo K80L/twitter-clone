@@ -32,8 +32,8 @@ func createTweet(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg":  "Tweet created successfully",
-		"data": tweet,
+		"msg":    "Tweet created successfully",
+		"tweets": tweet,
 	})
 }
 
@@ -50,8 +50,8 @@ func getCurrentUserTweets(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg":  "getCurrentUserTweets fetched successfully",
-		"data": user.Tweets,
+		"msg":    "getCurrentUserTweets fetched successfully",
+		"tweets": user.Tweets,
 	})
 }
 
@@ -66,8 +66,8 @@ func getAllTweets(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg":  "getTweets fetched successfully",
-		"data": tweets,
+		"msg":    "booger getTweets fetched successfully",
+		"tweets": tweets,
 	})
 }
 
@@ -82,8 +82,8 @@ func getTweetsByUserId(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg":  "fetchTweetsByUserId fetched successfully",
-		"data": tweets,
+		"msg":    "fetchTweetsByUserId fetched successfully",
+		"tweets": tweets,
 	})
 }
 
@@ -113,8 +113,8 @@ func updateTweet(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"msg":  "Tweet updated successfully.",
-		"data": jsonTweet,
+		"msg":    "Tweet updated successfully.",
+		"tweets": jsonTweet,
 	})
 }
 

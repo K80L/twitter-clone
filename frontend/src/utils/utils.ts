@@ -23,10 +23,10 @@ export function logout() {
 // This function attaches the JWT token to each request
 // and logs out if unverified.
 // TODO: Use this to send ALL requests.
-export async function authorizedRequest(
+export async function authorizedRequest<T>(
   url: string,
   options: RequestInit = {}
-): Promise<any> {
+): Promise<T> {
   let token = localStorage.getItem("token");
 
   if (token) {

@@ -3,6 +3,7 @@ package server
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -18,8 +19,9 @@ func testSetup() *gin.Engine {
 	gin.SetMode(gin.TestMode)
 	store.ResetTestDatabase()
 	cfg := conf.NewTestConfig()
+	fmt.Println(cfg)
 	jwtSetup(cfg)
-	return setRouter("dev")
+	return setRouter(cfg)
 }
 
 func addTestUser() *store.User {

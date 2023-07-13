@@ -3,15 +3,18 @@ package store
 import (
 	"errors"
 	"fmt"
-	"log"
 	"regexp"
 	"strings"
 
+	"github.com/93lykevin/go-twit-backend/internal/conf"
+	"github.com/93lykevin/go-twit-backend/internal/database"
 	"github.com/go-pg/pg/v10"
+	"github.com/rs/zerolog/log"
 )
 
 // server.go is the webservice that communicates with this package.
 // store.go package will be the only thing to ever communicate with the database
+// ex: client -> server.go -> store.go -> DB
 
 // database connector for the store package
 var db *pg.DB
@@ -20,7 +23,7 @@ var db *pg.DB
 // will be used immediately b/c we need to set our db connector
 func SetDBConnection(dbOpts *pg.Options) {
 	if dbOpts == nil {
-		log.Panicln("DB options cannot be nil")
+		log.Panic().Msg("DB options cannot be nil")
 	} else {
 		db = pg.Connect(dbOpts)
 	}
@@ -62,18 +65,18 @@ func extractColumnName(text string) string {
 }
 
 // TODO: FIXME
-// func ResetTestDatabase() {
-// 	// connect to test database
-// 	SetDBConnection(database.NewDBOptions(conf.NewTestConfig()))
+func ResetTestDatabase() {
+	// connect to test database
+	SetDBConnection(database.NewDBOptions(conf.NewTestConfig()))
 
-// 	// empty all tables and restart sequence counters
-// 	tables := []string{"users", "tweets"}
-// 	for _, table := range tables {
-// 		_, err := db.Exec(fmt.Sprintf("DELETE FROM %s;", table))
-// 		if err != nil {
-// 			log.Panic().Err(err).Str("Table", table).Msg("Error clearing test database")
-// 		}
+	// empty all tables and restart sequence counters
+	tables := []string{"users", "tweets"}
+	for _, table := range tables {
+		_, err := db.Exec(fmt.Sprintf("DELETE FROM %s;", table))
+		if err != nil {
+			log.Panic().Err(err).Str("Table", table).Msg("Error clearing test database")
+		}
 
-// 		_, err := db.Exec(fmt.Sprintf("ALTER SEQUENCE %s_id_seq RESTART;", table))
-// 	}
-// }
+		_, err = db.Exec(fmt.Sprintf("ALTER SEQUENCE %s_id_seq RESTART;", table))
+	}
+}
