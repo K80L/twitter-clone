@@ -63,18 +63,18 @@ func verifyJWT(tokenStr string) (int, error) {
 		return 0, err
 	}
 
-	fmt.Printf("Algorithm %v\n", token.Header().Algorithm)
-	fmt.Printf("Type      %v\n", token.Header().Type)
-	fmt.Printf("Claims    %v\n", string(token.Claims()))
-	fmt.Printf("Payload   %v\n", string(token.PayloadPart()))
-	fmt.Printf("Token     %v\n", string(token.Bytes()))
+	// fmt.Printf("Algorithm %v\n", token.Header().Algorithm)
+	// fmt.Printf("Type      %v\n", token.Header().Type)
+	// fmt.Printf("Claims    %v\n", string(token.Claims()))
+	// fmt.Printf("Payload   %v\n", string(token.PayloadPart()))
+	// fmt.Printf("Token     %v\n", string(token.Bytes()))
 	if err := jwtVerifier.Verify(token); err != nil {
 		log.Error().Err(err).Msg("Error verifying JWT")
 		return 0, err
 	}
 
 	var claims jwt.RegisteredClaims
-	fmt.Println(string(token.ClaimsPart()))
+	// fmt.Println(string(token.ClaimsPart()))
 	if err := json.Unmarshal(token.Claims(), &claims); err != nil {
 		log.Error().Err(err).Msg("Error unmarshalling JWT claims")
 		return 0, err

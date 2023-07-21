@@ -17,6 +17,9 @@ export const API_ROUTES = {
       BY_USER_ID: BASE_URL + TWEETS + `/:userId`,
       BY_CURRENT_USER: BASE_URL + TWEETS + `/current-user`,
     },
+    POST: {
+      CREATE_TWEET: BASE_URL + TWEETS,
+    },
   },
 };
 

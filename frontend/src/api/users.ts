@@ -20,9 +20,6 @@ export async function signup({ username, password }: User): Promise<User> {
     if (!response.ok) throw response;
     const data = response.json();
 
-    console.log(response);
-    console.log(data);
-
     return data;
   } catch (_error) {
     throw new Error("There was an error signing up");

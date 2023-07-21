@@ -1,14 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 
 import TweetItem from "./TweetItem";
-import { fetchAllTweets } from "../../../api/tweets";
+import { fetchAllTweets, TweetWithUser } from "../../../api/tweets";
 
 export default function TweetsList() {
-  const {
-    data: tweets,
-    error,
-    isLoading,
-  } = useQuery(["allTweets"], fetchAllTweets);
+  const { data, error, isLoading } = useQuery(["allTweets"], fetchAllTweets);
 
   if (error) {
     console.log(error);
@@ -16,10 +12,13 @@ export default function TweetsList() {
   if (isLoading) {
     return <div>...Loading</div>;
   }
+
+  if (!data) return null;
+
   return (
-    <div>
-      {tweets?.map((tweet, idx) => (
-        <TweetItem key={idx} tweet={tweet} />
+    <div className="tweets__container">
+      {data.map((tweetWithUser: TweetWithUser, idx: number) => (
+        <TweetItem key={idx} tweet={tweetWithUser} />
       ))}
     </div>
   );

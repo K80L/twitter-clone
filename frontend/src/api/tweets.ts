@@ -1,11 +1,9 @@
 import { API_ROUTES, GET_REQUEST_OPTIONS } from "../utils/constants";
 import { authorizedRequest } from "../utils/utils";
 
-export interface Tweet {
-  content: string;
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
+interface RawUser {
+  ID: number;
+  Username: string;
 }
 
 interface RawTweet {
@@ -13,6 +11,23 @@ interface RawTweet {
   ID: number;
   CreatedAt: Date;
   UpdatedAt: Date;
+  User: RawUser;
+}
+
+export interface User {
+  id: number;
+  username: string;
+}
+
+export interface Tweet {
+  content: string;
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface TweetWithUser extends Tweet {
+  user: User;
 }
 
 interface TweetsResponse {
@@ -21,7 +36,6 @@ interface TweetsResponse {
 }
 
 export const fetchCurrentUserTweets = async () => {
-  console.log("fetchCurrentUserTweets");
   try {
     const res = await fetch(API_ROUTES.TWEETS.GET.BY_CURRENT_USER, {
       ...GET_REQUEST_OPTIONS,
@@ -67,13 +81,17 @@ export const fetchTweetsByUserId = async ({ queryKey }: any) => {
   }
 };
 
-function parseTweetsResponse(tweetsResponse: TweetsResponse) {
+function parseTweetsResponse(tweetsResponse: TweetsResponse): TweetWithUser[] {
   const tweets = tweetsResponse.tweets.map((tweet) => {
     return {
       content: tweet.Content,
       id: tweet.ID,
       createdAt: tweet.CreatedAt,
       updatedAt: tweet.UpdatedAt,
+      user: {
+        id: tweet.User.ID,
+        username: tweet.User.Username,
+      },
     };
   });
 

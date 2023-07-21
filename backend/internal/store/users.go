@@ -25,6 +25,10 @@ type User struct {
 // the db will return nil but that will be bad for the FE. this hook will instead return an empty slice
 var _ pg.AfterSelectHook = (*User)(nil)
 
+func (User) TableName() string {
+	return "users"
+}
+
 func (user *User) AfterSelect(ctx context.Context) error {
 	if user.Tweets == nil {
 		user.Tweets = []*Tweet{}

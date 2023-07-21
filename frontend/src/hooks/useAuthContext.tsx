@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const location = useLocation();
 
   const logout: any = useCallback(
-    function() {
+    function () {
       sessionApi.logout();
       setUser(undefined);
       setToken(null);
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     usersApi
       .getCurrentUser()
       .then((user) => setUser(user))
-      .catch((_error: any) => { })
+      .catch((_error: any) => {})
       .finally(() => setIsLoadingInitial(false));
   }, []);
 
@@ -74,13 +74,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [token, setToken, logout]);
 
   const login = useCallback(
-    function({ username, password }: sessionApi.LoginCredentials) {
+    function ({ username, password }: sessionApi.LoginCredentials) {
       setIsLoading(true);
 
       sessionApi
         .login({ username, password })
         .then((data) => {
-          console.log(data);
           data && setToken(data.jwt);
           setIsLoading(false);
           navigate("/");
@@ -95,7 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const signup = useCallback(
-    function({ username, password }: sessionApi.LoginCredentials) {
+    function ({ username, password }: sessionApi.LoginCredentials) {
       setIsLoading(true);
 
       usersApi

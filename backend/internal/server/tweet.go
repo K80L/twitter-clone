@@ -55,9 +55,25 @@ func getCurrentUserTweets(ctx *gin.Context) {
 	})
 }
 
+func getTweetById(ctx *gin.Context) {
+	param := ctx.Param("tweet_id")
+	tweetId, err := strconv.Atoi(param)
+
+	tweet, err := store.FetchTweet(tweetId)
+
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":   "fetch tweet by id",
+		"tweet": tweet,
+	})
+}
+
 /*
-	get ALL tweets
-	TODO: Add in pagination
+get ALL tweets
+TODO: Add in pagination
 */
 func getAllTweets(ctx *gin.Context) {
 	tweets, err := store.GetAllTweets()

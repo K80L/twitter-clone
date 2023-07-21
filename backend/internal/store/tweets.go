@@ -13,10 +13,17 @@ type Tweet struct {
 	Content   string `binding:"required,min=1,max=144"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	UserID    int `json:"-"`
+	UserID    int   `json:"-"` // the `json:"-"` tag instructs the JSON encoder to ignore the UserID field when marshallig the Tweet
+	User      *User `pg:"rel:has-one"`
+}
+
+type TweetWithUser struct {
+	Tweet
+	User *User `pg:"rel:has-one"`
 }
 
 // reminder, only packages in the store can communicate with the database
+
 // AddTweet is the actual function that communicates with the database to create a new Tweet
 // This gets called by server/tweet.go
 func AddTweet(user *User, tweet *Tweet) error {
@@ -28,16 +35,30 @@ func AddTweet(user *User, tweet *Tweet) error {
 	return err
 }
 
-func GetAllTweets() ([]Tweet, error) {
+func GetAllTweets() ([]TweetWithUser, error) {
 	tweets := make([]Tweet, 0)
 
-	err := db.Model(&tweets).Select()
+	err := db.Model(&tweets).
+		Relation("User").
+		Select()
 
 	if err != nil {
 		log.Error().Err(err).Msg("Error fetching all tweets")
 	}
 
-	return tweets, err
+	tweetsWithUser := make([]TweetWithUser, 0, len(tweets))
+
+	// Convert the tweets to tweet responses
+	for _, tweet := range tweets {
+		tweetWithUser := TweetWithUser{
+			Tweet: tweet,
+			User:  tweet.User,
+		}
+
+		tweetsWithUser = append(tweetsWithUser, tweetWithUser)
+	}
+
+	return tweetsWithUser, err
 }
 
 func GetCurrentUserTweets(user *User) error {
@@ -56,16 +77,33 @@ func GetCurrentUserTweets(user *User) error {
 	return err
 }
 
-func GetTweetsByUserId(userId int) ([]Tweet, error) {
+func GetTweetsByUserId(userId int) ([]TweetWithUser, error) {
 	tweets := make([]Tweet, 0)
-	// TODO
-	err := db.Model(&tweets).Where("user_id = ?", userId).Select()
+
+	err := db.Model(&tweets).
+		Where("user_id = ?", userId).
+		Relation("User").
+		Select()
 
 	if err != nil {
 		log.Error().Err(err).Msg("Error fetching user's tweets")
+		return nil, err
 	}
 
-	return tweets, err
+	// Create a separate slice for the response
+	tweetsWithUser := make([]TweetWithUser, 0, len(tweets))
+
+	// Convert the tweets to tweet responses
+	for _, tweet := range tweets {
+		tweetWithUser := TweetWithUser{
+			Tweet: tweet,
+			User:  tweet.User,
+		}
+
+		tweetsWithUser = append(tweetsWithUser, tweetWithUser)
+	}
+
+	return tweetsWithUser, err
 }
 
 func FetchTweet(id int) (*Tweet, error) {

@@ -53,6 +53,7 @@ func setRouter(cfg conf.Config) *gin.Engine {
 	authorized.Use(authorization)
 	{
 		authorized.GET("/logout/:userId", logout)
+		authorized.GET("/tweet/:tweet_id", getTweetById)
 		authorized.GET("/tweets", getAllTweets)
 		authorized.GET("/tweets/current-user", getCurrentUserTweets)
 		authorized.GET("/tweets/:user_id", getTweetsByUserId)
